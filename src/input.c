@@ -1170,65 +1170,65 @@ GLFWAPI GLFWjoystickfun glfwSetJoystickCallback(GLFWjoystickfun cbfun)
     return cbfun;
 }
 
-GLFWAPI int glfwUpdateGamepadMappings(const char* string)
-{
-    int jid;
-    const char* c = string;
-
-    assert(string != NULL);
-
-    _GLFW_REQUIRE_INIT_OR_RETURN(GLFW_FALSE);
-
-    while (*c)
-    {
-        if ((*c >= '0' && *c <= '9') ||
-            (*c >= 'a' && *c <= 'f') ||
-            (*c >= 'A' && *c <= 'F'))
-        {
-            char line[1024];
-
-            const size_t length = strcspn(c, "\r\n");
-            if (length < sizeof(line))
-            {
-                _GLFWmapping mapping = {{0}};
-
-                memcpy(line, c, length);
-                line[length] = '\0';
-
-                if (parseMapping(&mapping, line))
-                {
-                    _GLFWmapping* previous = findMapping(mapping.guid);
-                    if (previous)
-                        *previous = mapping;
-                    else
-                    {
-                        _glfw.mappingCount++;
-                        _glfw.mappings =
-                            _glfw_realloc(_glfw.mappings,
-                                          sizeof(_GLFWmapping) * _glfw.mappingCount);
-                        _glfw.mappings[_glfw.mappingCount - 1] = mapping;
-                    }
-                }
-            }
-
-            c += length;
-        }
-        else
-        {
-            c += strcspn(c, "\r\n");
-            c += strspn(c, "\r\n");
-        }
-    }
-
-    for (jid = 0;  jid <= GLFW_JOYSTICK_LAST;  jid++)
-    {
-        _GLFWjoystick* js = _glfw.joysticks + jid;
-        if (js->present)
-            js->mapping = findValidMapping(js);
-    }
-
-    return GLFW_TRUE;
-}
+//GLFWAPI int glfwUpdateGamepadMappings(const char* string)
+//{
+//    int jid;
+//    const char* c = string;
+//
+//    assert(string != NULL);
+//
+//    _GLFW_REQUIRE_INIT_OR_RETURN(GLFW_FALSE);
+//
+//    while (*c)
+//    {
+//        if ((*c >= '0' && *c <= '9') ||
+//            (*c >= 'a' && *c <= 'f') ||
+//            (*c >= 'A' && *c <= 'F'))
+//        {
+//            char line[1024];
+//
+//            const size_t length = strcspn(c, "\r\n");
+//            if (length < sizeof(line))
+//            {
+//                _GLFWmapping mapping = {{0}};
+//
+//                memcpy(line, c, length);
+//                line[length] = '\0';
+//
+//                if (parseMapping(&mapping, line))
+//                {
+//                    _GLFWmapping* previous = findMapping(mapping.guid);
+//                    if (previous)
+//                        *previous = mapping;
+//                    else
+//                    {
+//                        _glfw.mappingCount++;
+//                        _glfw.mappings =
+//                            _glfw_realloc(_glfw.mappings,
+//                                          sizeof(_GLFWmapping) * _glfw.mappingCount);
+//                        _glfw.mappings[_glfw.mappingCount - 1] = mapping;
+//                    }
+//                }
+//            }
+//
+//            c += length;
+//        }
+//        else
+//        {
+//            c += strcspn(c, "\r\n");
+//            c += strspn(c, "\r\n");
+//        }
+//    }
+//
+//    for (jid = 0;  jid <= GLFW_JOYSTICK_LAST;  jid++)
+//    {
+//        _GLFWjoystick* js = _glfw.joysticks + jid;
+//        if (js->present)
+//            js->mapping = findValidMapping(js);
+//    }
+//
+//    return GLFW_TRUE;
+//}
 
 GLFWAPI int glfwJoystickIsGamepad(int jid)
 {
